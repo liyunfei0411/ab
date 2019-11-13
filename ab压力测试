@@ -1,0 +1,45 @@
+传递POST参数的步骤：
+
+1，新建一个文件，里面放入POST参数。
+
+注意，这个承载POST参数的文件，不依赖于后缀名。可跨平台（比如 Linux 下用 vi 建立的文件，win下也可以用）
+
+POST文本内容如下：
+
+name=chang&password=11111ok
+
+我把这个文本保存成 postdata.txt ，放到了win机器下的 F盘 下。
+
+ 
+
+1*，在服务端用代码检测一下，参数是否正常接收（这步不是必须）：
+
+django端代码（就是把传递过来的POST参数打印出来）
+
+ 
+
+def abpost(request):
+    print "POST data is:", request.POST
+    return HttpResponse(request.POST)
+ 
+
+ 
+
+2，使用ab命令
+
+ab -n 1 -c 1 -p f:/postdata.txt -T application/x-www-form-urlencoded "http://127.0.0.1/abpost"
+
+例如win下：
+
+
+
+上面命令的简单说明：
+
+-n 测试几次（Number of requests to perform for the benchmarking session. The default is to just perform a single request which usually leads to non-representative benchmarking results.）
+
+-c 模拟多少客户端（Number of multiple requests to perform at a time. Default is one request at a time.）
+
+-T 内容类型。这个一般和-p 一起使用（Content-type header to use for POST data.）
+
+-p 包含POST参数的文件（File containing data to POST.）
+
